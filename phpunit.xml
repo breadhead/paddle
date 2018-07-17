@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+	 backupStaticAttributes="false"
+	 colors="true"
+	 convertErrorsToExceptions="true"
+	 convertNoticesToExceptions="true"
+	 convertWarningsToExceptions="true"
+	 processIsolation="false"
+	 stopOnFailure="true"
+	 syntaxCheck="true"
+>
+	<testsuites>
+		<testsuite name="API Test Suite">
+			<file>./tests/common.php</file>
+			<file>./tests/generate_product_pay_link.php</file>
+			<file>./tests/generate_custom_product_pay_link.php</file>
+			<file>./tests/generate_license.php</file>
+			<file>./tests/generate_customers_report.php</file>
+			<file>./tests/generate_auth_code.php</file>
+			<file>./tests/generate_license_activations_report.php</file>
+			<file>./tests/generate_orders_report.php</file>
+			<file>./tests/generate_sent_licenses_report.php</file>
+			<file>./tests/get_public_key.php</file>
+			<file>./tests/get_products.php</file>
+			<file>./tests/register_external_application.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>
