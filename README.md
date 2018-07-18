@@ -8,48 +8,8 @@ PHP 5.3 or later.
 
 ## Installation via Composer
 
-https://getcomposer.org/
-
-You can install the library via Composer. Add this to your composer.json:
-
-```javascript
-{
-    "require": {
-        "paddle/php-api": "1.*"
-    }
-}
-```
-
-Then install via:
-
-```
-composer.phar install
-```
-
-To use the library, either user Composer's autoload:
-
-```php
-require_once('vendor/autoload.php');
-```
-
-Or manually:
-
-```php
-require_once('/path/to/library/autoload.php');
-```
-
-## Manual Installation
-
-Obtain the latest version of the Paddle library with:
-
-```
-git clone https://github.com/PaddleHQ/paddle-php
-```
-
-To use the library, add the following to your PHP script:
-
-```php
-require_once('/path/to/library/autoload.php');
+```sh
+composer req breadhead/paddle
 ```
 
 ## Getting Started
@@ -57,7 +17,7 @@ require_once('/path/to/library/autoload.php');
 To interact with Paddle API you need to create an API object, and authorize using vendor_id / vendor_api_key:
 
 ```php
-$api = new \Paddle\Api();
+$api = new \Breadhead\Paddle\Api();
 $api->authorize_vendor($vendor_id, $vendor_auth_code);
 ```
 
@@ -70,14 +30,14 @@ $api->set_timeout(60);
 Both authorization and timeout can be set as well while creating new API object:
 
 ```php
-$api = new \Paddle\Api($vendor_id, $vendor_auth_code, 60);
+$api = new \Breadhead\Paddle\Api($vendor_id, $vendor_auth_code, 60);
 ```
 
 Example usage of generate_license() method:
 
 ```php
 // define $vendor_id and $vendor_auth_code first
-$api = new \Paddle\Api($vendor_id, $vendor_auth_code, 60);
+$api = new \Breadhead\Paddle\Api($vendor_id, $vendor_auth_code, 60);
 $product_id = 100;
 $license_code = $api->generate_license($product_id);
 ```
@@ -401,28 +361,3 @@ string register_external_application (string $application_name, string $applicat
 ```php
 string get_vendor_public_key ()
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
