@@ -1,5 +1,5 @@
 {
-	"name": "breadhead/paddle-php-api",
+	"name": "breadhead/paddle",
 	"type": "library",
 	"description": "Breadhead version of Paddle.com API PHP library",
 	"homepage": "https://github.com/breadhead/paddle",
