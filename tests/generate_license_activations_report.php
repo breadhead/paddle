@@ -6,13 +6,13 @@ class Generate_License_Activations_Report extends Test_Case {
 
 	public function test_valid_arguments() {
 		$this->assertTrue(is_array(
-				$this->api->generate_license_activations_report($this->product_id)
+				$this->api->generateLicenseActivationsReport($this->productId)
 		));
 		$this->assertTrue(is_array(
-				$this->api->generate_license_activations_report()
+				$this->api->generateLicenseActivationsReport()
 		));
 		$this->assertTrue(is_array(
-				$this->api->generate_license_activations_report(null, strtotime('1 January 2000'), strtotime('1 January 2100'))
+				$this->api->generateLicenseActivationsReport(null, strtotime('1 January 2000'), strtotime('1 January 2100'))
 		));
 	}
 
@@ -33,10 +33,10 @@ class Generate_License_Activations_Report extends Test_Case {
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
-		$this->api->generate_license_activations_report($id);
+		$this->api->generateLicenseActivationsReport($id);
 	}
 
-	public function invalid_timestamp_data_provider() {
+	public function invalidTimestampDataProvider() {
 		return array(
 			array('string'),
 			array(true),
@@ -47,19 +47,19 @@ class Generate_License_Activations_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalid_timestamp_data_provider
+	 * @dataProvider invalidTimestampDataProvider
 	 */
-	public function test_invalid_start_timestamp($start_timestamp) {
+	public function test_invalid_start_timestamp($startTimestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_321, 321);
-		$this->api->generate_license_activations_report(null, $start_timestamp);
+		$this->api->generateLicenseActivationsReport(null, $startTimestamp);
 	}
 
 	/**
 	 * @dataProvider invalid_timestamp_data_provider
 	 */
-	public function test_invalid_end_timestamp($end_timestamp) {
+	public function test_invalid_end_timestamp($endTimestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_322, 322);
-		$this->api->generate_license_activations_report(null, null, $end_timestamp);
+		$this->api->generateLicenseActivationsReport(null, null, $endTimestamp);
 	}
 
 }

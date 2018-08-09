@@ -6,8 +6,8 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 
 	private $title = 'test title';
 	private $price = 10;
-	private $image_url = 'http://example.com';
-	private $webhook_url = 'http://example.com';
+	private $imageUrl = 'http://example.com';
+	private $webhookUrl = 'http://example.com';
 
 	public function test_valid_arguments() {
 		$data = array(
@@ -19,20 +19,20 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 			'is_popup' => true,
 			'parent_url' => 'http://example.com',
 			'affiliates' => array(
-				$this->affiliate_id => $this->affiliate_commission
+				$this->affiliateId => $this->affiliateCommission
 			),
 			'stylesheets' => array(
-				$this->vendor_stylesheet_type => $this->vendor_stylesheet_identifier
+				$this->vendorStylesheetType => $this->vendorStylesheetIdentifier
 			)
 		);
 
 		// check if valid paylink was returned by api
-		$url = $this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$url = $this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 		$this->assertEquals($url, filter_var($url, FILTER_VALIDATE_URL));
 	}
 
 	/**
-	 * @dataProvider invalid_url_data_provider
+	 * @dataProvider invalidUrlDataProvider
 	 */
 	public function test_invalid_return_url($url) {
 		$data = array(
@@ -40,11 +40,11 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_305, 305);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	/**
-	 * @dataProvider invalid_url_data_provider
+	 * @dataProvider invalidUrlDataProvider
 	 */
 	public function test_invalid_paypal_cancel_url($url) {
 		$data = array(
@@ -52,10 +52,10 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_306, 306);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
-	public function invalid_expires_data_provider() {
+	public function invalidExpiresDataProvider() {
 		return array(
 			array('string'),
 			array(true),
@@ -64,7 +64,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalid_expires_data_provider
+	 * @dataProvider invalidExpiresDataProvider
 	 */
 	public function test_invalid_expires($expires) {
 		$data = array(
@@ -72,7 +72,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_307, 307);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	public function test_past_expires() {
@@ -81,11 +81,11 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_308, 308);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	/**
-	 * @dataProvider invalid_url_data_provider
+	 * @dataProvider invalidUrlDataProvider
 	 */
 	public function test_invalid_parent_url($url) {
 		$data = array(
@@ -93,10 +93,10 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_309, 309);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
-	public function not_array_affiliates_data_provider() {
+	public function notArrayAffiliatesDataProvider() {
 		return array(
 			array('string'),
 			array(true),
@@ -106,7 +106,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider not_array_affiliates_data_provider
+	 * @dataProvider notArrayAffiliatesDataProvider
 	 */
 	public function test_not_array_affiliates($affiliates) {
 		$data = array(
@@ -114,17 +114,17 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_310, 310);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
-	public function invalid_array_affiliates_data_provider() {
+	public function invalidArrayAffiliatesDataProvider() {
 		return array(
 			array(array(1))
 		);
 	}
 
 	/**
-	 * @dataProvider invalid_array_affiliates_data_provider
+	 * @dataProvider invalidArrayAffiliatesDataProvider
 	 */
 	public function test_invalid_array_affiliates($affiliates) {
 		$data = array(
@@ -132,10 +132,10 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_311, 311);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
-	public function not_array_stylesheets_data_provider() {
+	public function notArrayStylesheetsDataProvider() {
 		return array(
 			array('string'),
 			array(true),
@@ -145,7 +145,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider not_array_stylesheets_data_provider
+	 * @dataProvider notArrayStylesheetsDataProvider
 	 */
 	public function test_not_array_stylesheets($stylesheets) {
 		$data = array(
@@ -153,17 +153,17 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_312, 312);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
-	public function invalid_array_stylesheets_data_provider() {
+	public function invalidArrayStylesheetsDataProvider() {
 		return array(
 			array(array(1))
 		);
 	}
 
 	/**
-	 * @dataProvider invalid_array_stylesheets_data_provider
+	 * @dataProvider invalidArrayStylesheetsDataProvider
 	 */
 	public function test_invalid_array_stylesheets($stylesheets) {
 		$data = array(
@@ -171,15 +171,15 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_313, 313);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	/**
-	 * @dataProvider invalid_url_data_provider
+	 * @dataProvider invalidUrlDataProvider
 	 */
 	public function test_invalid_webhook_url($url) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_315, 315);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $url, array());
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $url, array());
 	}
 
 	public function test_forbidden_discountable() {
@@ -187,7 +187,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		$data = array(
 			'discountable' => true
 		);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	public function test_forbidden_coupon_code() {
@@ -195,7 +195,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		$data = array(
 			'coupon_code' => true
 		);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 	public function test_forbidden_product_id() {
@@ -203,7 +203,7 @@ class Generate_Custom_Product_Pay_Link extends Test_Case {
 		$data = array(
 			'product_id' => true
 		);
-		$this->api->generate_custom_product_pay_link($this->title, $this->price, $this->image_url, $this->webhook_url, $data);
+		$this->api->generateCustomProductPayLink($this->title, $this->price, $this->imageUrl, $this->webhookUrl, $data);
 	}
 
 }

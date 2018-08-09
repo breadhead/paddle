@@ -6,17 +6,17 @@ class Generate_Orders_Report extends Test_Case {
 
 	public function test_valid_arguments() {
 		$this->assertTrue(is_array(
-				$this->api->generate_orders_report($this->product_id)
+				$this->api->generateOrdersReport($this->productId)
 		));
 		$this->assertTrue(is_array(
-				$this->api->generate_orders_report()
+				$this->api->generateOrdersReport()
 		));
 		$this->assertTrue(is_array(
-				$this->api->generate_orders_report(null, strtotime('1 January 2000'), strtotime('1 January 2100'))
+				$this->api->generateOrdersReport(null, strtotime('1 January 2000'), strtotime('1 January 2100'))
 		));
 	}
 
-	public function invalid_product_id_data_provider() {
+	public function invalidProductIdDataProvider() {
 		return array(
 			array('string'),
 			array(0),
@@ -29,14 +29,14 @@ class Generate_Orders_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalid_product_id_data_provider
+	 * @dataProvider invalidProductIdDataProvider
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
-		$this->api->generate_orders_report($id);
+		$this->api->generateOrdersReport($id);
 	}
 
-	public function invalid_timestamp_data_provider() {
+	public function invalidTimestampDataProvider() {
 		return array(
 			array('string'),
 			array(true),
@@ -47,19 +47,19 @@ class Generate_Orders_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalid_timestamp_data_provider
+	 * @dataProvider invalidTimestampDataProvider
 	 */
-	public function test_invalid_start_timestamp($start_timestamp) {
+	public function test_invalid_start_timestamp($startTimestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_321, 321);
-		$this->api->generate_orders_report(null, $start_timestamp);
+		$this->api->generateOrdersReport(null, $startTimestamp);
 	}
 
 	/**
-	 * @dataProvider invalid_timestamp_data_provider
+	 * @dataProvider invalidTimestampDataProvider
 	 */
-	public function test_invalid_end_timestamp($end_timestamp) {
+	public function test_invalid_end_timestamp($endTimestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_322, 322);
-		$this->api->generate_orders_report(null, null, $end_timestamp);
+		$this->api->generateOrdersReport(null, null, $endTimestamp);
 	}
 
 }
