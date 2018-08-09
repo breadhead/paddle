@@ -169,13 +169,13 @@ class Filters {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_310, 310);
 		}
 		$affiliates = array();
-		foreach ($value as $key => $value) {
+		foreach ($value as $key => $v) {
 			// validate affiliates array structure
-			if (empty($key) || empty($value)) {
+			if (empty($key) || empty($v)) {
 				throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_311, 311);
 			}
 
-			$affiliates[] = $key . ':' . $value;
+			$affiliates[] = $key . ':' . $v;
 		}
 
 		return $affiliates;
