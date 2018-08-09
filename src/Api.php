@@ -178,7 +178,8 @@ class Api {
      * Commission value should be float, so commission '0.1' equals 10%.
      * - array 'stylesheets' - every element should contain stylesheet type as key, and code as value
      * @return string - pay link
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateProductPayLink($productId, array $optionalArguments = array()) {
 
@@ -253,7 +254,8 @@ class Api {
      * Commission value should be float, so commission '0.1' equals 10%.
      * - array 'stylesheets' - every element should contain stylesheet type as key, and code as value
      * @return string - pay link
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateCustomProductPayLink($title, $price, $imageUrl, $webhookUrl, array $optionalArguments) {
         $data = array();
@@ -316,7 +318,8 @@ class Api {
      * Generate license code for framework product
      * @param int $productId - the id of the product
      * @return string - license code
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateLicense($productId) {
         $data = array();
@@ -341,7 +344,8 @@ class Api {
      * - float 'sale_price' - sale price of the product
      * - array 'screenshots' - screenshots of the product
      * - string 'icon' - image of the product
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function getProducts($limit = 1, $offset = 0) {
         $data = array();
@@ -358,7 +362,8 @@ class Api {
      * @return array - returned array contains:
      * - string 'full_name' - full name of the customer
      * - string 'email' - email address of the customer
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateCustomersReport($productId = null) {
         $data = array();
@@ -378,7 +383,8 @@ class Api {
      * - string 'customer_email' - email address of the customer
      * - string 'product_name' - name of the product
      * - string 'license_code' - license code
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateSentLicensesReport($productId = null) {
         $data = array();
@@ -401,7 +407,8 @@ class Api {
      * - float 'your_earnings' - your earnings
      * - string 'earnings_currency' - earnings currency
      * - string 'sale_date' - sale date
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateOrdersReport($productId = null, $startTimestamp = null, $endTimestamp = null) {
         $data = array();
@@ -430,7 +437,8 @@ class Api {
      * - string 'activation_date' - activation date
      * - string 'customer_ip' - customer ip
      * - string 'customer_email' - customer email
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateLicenseActivationsReport($productId = null, $startTimestamp = null, $endTimestamp = null) {
         $data = array();
@@ -454,7 +462,8 @@ class Api {
      * @return array - returned array contains:
      * - int 'vendor_id'
      * - string 'vendor_auth_code'
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function generateAuthCode($vendorEmail, $vendorPassword) {
         $data = array();
@@ -470,7 +479,8 @@ class Api {
      * @param string $applicationDescription - application description
      * @param string $applicationIconUrl - application icon url
      * @return string
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function registerExternalApplication($applicationName, $applicationDescription, $applicationIconUrl) {
         $data = array();
@@ -485,7 +495,8 @@ class Api {
     /**
      * Get vendor public key
      * @return string
-     * @throws
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function getVendorPublicKey() {
         $response = $this->httpCall('/user/get_public_key', 'POST');
