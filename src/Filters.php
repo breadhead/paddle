@@ -126,7 +126,7 @@ class Filters {
      * @return false|string - date
      * @throws \InvalidArgumentException
      */
-    public static function filter_expires($value) {
+    public static function filterExpires($value) {
 		if ((!filter_var($value, FILTER_VALIDATE_INT) || !is_numeric($value))) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_307, 307);
 		} else if ($value < time()) {
