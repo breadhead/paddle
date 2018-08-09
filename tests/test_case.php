@@ -7,17 +7,17 @@ class Test_Case extends PHPUnit_Framework_TestCase {
 
 	const CONFIG_FILE_NAME = 'config.php';
 
-	protected $vendor_email;
-	protected $vendor_password;
-	protected $vendor_id;
-	protected $vendor_auth_code;
-	protected $vendor_stylesheet_type;
-	protected $vendor_stylesheet_identifier;
-	protected $affiliate_id;
-	protected $affiliate_commission;
-	protected $product_id;
-	protected $product_coupon_code;
-	protected $framework_product_id;
+	protected $vendorEmail;
+	protected $vendorPassword;
+	protected $vendorId;
+	protected $vendorAuthCode;
+	protected $vendorStylesheetType;
+	protected $vendorStylesheetIdentifier;
+	protected $affiliateId;
+	protected $affiliateCommission;
+	protected $productId;
+	protected $productCouponCode;
+	protected $frameworkProductId;
 	protected $api;
 
 	public function setUp() {
@@ -30,25 +30,25 @@ class Test_Case extends PHPUnit_Framework_TestCase {
 		}
 
 		// create an api instance
-		$this->api = new Breadhead\Paddle\Api($this->vendor_id, $this->vendor_auth_code);
+		$this->api = new Breadhead\Paddle\Api($this->vendorId, $this->vendorAuthCode);
 	}
 
 	public function test_setup() {
-		$missing_config_field_message = 'Please provide all config variables in ' . self::CONFIG_FILE_NAME;
-		$this->assertTrue($this->vendor_email !== null, $missing_config_field_message);
-		$this->assertTrue($this->vendor_password !== null, $missing_config_field_message);
-		$this->assertTrue($this->vendor_id !== null, $missing_config_field_message);
-		$this->assertTrue($this->vendor_auth_code !== null, $missing_config_field_message);
-		$this->assertTrue($this->vendor_stylesheet_type !== null, $missing_config_field_message);
-		$this->assertTrue($this->vendor_stylesheet_identifier !== null, $missing_config_field_message);
-		$this->assertTrue($this->affiliate_id !== null, $missing_config_field_message);
-		$this->assertTrue($this->affiliate_commission !== null, $missing_config_field_message);
-		$this->assertTrue($this->product_id !== null, $missing_config_field_message);
-		$this->assertTrue($this->product_coupon_code !== null, $missing_config_field_message);
+		$missingConfigFieldMessage = 'Please provide all config variables in ' . self::CONFIG_FILE_NAME;
+		$this->assertTrue($this->vendorEmail !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->vendorPassword !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->vendorId !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->vendorAuthCode !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->vendorStylesheetType !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->vendorStylesheetIdentifier !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->affiliateId !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->affiliateCommission !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->productId !== null, $missingConfigFieldMessage);
+		$this->assertTrue($this->productCouponCode !== null, $missingConfigFieldMessage);
 		$this->assertTrue($this->api !== null, 'Api object not created properly');
 	}
 
-	public function invalid_url_data_provider() {
+	public function invalidUrlDataProvider() {
 		return array(
 			array('example.com'),
 			array('abc'),
@@ -65,8 +65,9 @@ class Test_Case extends PHPUnit_Framework_TestCase {
 	 * @param type $object instantiated object that we will run method on
 	 * @param type $methodName method name to call
 	 * @param array $parameters array of parameters to pass into method
+     * @throws
 	 */
-	protected function call_private_method($object, $methodName, array $parameters = array()) {
+	protected function callPrivateMethod($object, $methodName, array $parameters = array()) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
@@ -78,8 +79,9 @@ class Test_Case extends PHPUnit_Framework_TestCase {
 	 * @param object $object instantiated object that we will run method on
 	 * @param string $field_name field name to set
 	 * @param mixed $field_value field value to set
+     * @throws
 	 */
-	protected function set_private_field($object, $field_name, $field_value) {
+	protected function setPrivateField($object, $field_name, $field_value) {
 		$reflector = new ReflectionProperty(get_class($object), $field_name);
 		$reflector->setAccessible(true);
 		$reflector->setValue($object, $field_value);

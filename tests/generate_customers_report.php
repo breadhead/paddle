@@ -5,11 +5,11 @@ require_once __DIR__ . '/test_case.php';
 class Generate_Customers_Report extends Test_Case {
 
 	public function test_valid_arguments() {
-		$this->assertTrue(is_array($this->api->generate_customers_report($this->product_id)));
-		$this->assertTrue(is_array($this->api->generate_customers_report()));
+		$this->assertTrue(is_array($this->api->generateCustomersReport($this->productId)));
+		$this->assertTrue(is_array($this->api->generateCustomersReport()));
 	}
 
-	public function invalid_product_id_data_provider() {
+	public function invalidProductIdDataProvider() {
 		return array(
 			array('string'),
 			array(0),
@@ -22,11 +22,11 @@ class Generate_Customers_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalid_product_id_data_provider
+	 * @dataProvider invalidProductIdDataProvider
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
-		$this->api->generate_customers_report($id);
+		$this->api->generateCustomersReport($id);
 	}
 
 }
