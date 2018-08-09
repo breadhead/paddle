@@ -7,7 +7,7 @@ class FiltersTest extends Test_Case {
 
 	public function test_filter_expires()
 	{
-		$date = Filters::filter_expires(time());
+		$date = Filters::filterExpires(time());
 		$this->assertEquals(date('Y-m-d'), $date);
 	}
 }
