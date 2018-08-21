@@ -14,26 +14,26 @@ composer req breadhead/paddle
 
 ## Getting Started
 
-To interact with Paddle API you need to create an API object, and authorize using vendor_id / vendor_api_key:
+To interact with Paddle API you need to create an API object, and authorize using vendorId / vendorApiKey:
 
 ```php
 $api = new \Breadhead\Paddle\Api();
-$api->authorize_vendor($vendor_id, $vendor_auth_code);
+$api->authorizeVendor($vendorId, $vendorAuthCode);
 ```
 
 Optionally you can set HTTP timeout (default is 30 seconds):
 
 ```php
-$api->set_timeout(60);
+$api->setTimeout(60);
 ```
 
 Both authorization and timeout can be set as well while creating new API object:
 
 ```php
-$api = new \Breadhead\Paddle\Api($vendor_id, $vendor_auth_code, 60);
+$api = new \Breadhead\Paddle\Api($vendorId, $vendorAuthCode, 60);
 ```
 
-Example usage of generate_license() method:
+Example usage of generateLicense() method:
 
 ```php
 // define $vendorId and $vendorAuthCode first
