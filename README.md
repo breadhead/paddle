@@ -14,32 +14,32 @@ composer req breadhead/paddle
 
 ## Getting Started
 
-To interact with Paddle API you need to create an API object, and authorize using vendor_id / vendor_api_key:
+To interact with Paddle API you need to create an API object, and authorize using vendorId / vendorApiKey:
 
 ```php
 $api = new \Breadhead\Paddle\Api();
-$api->authorize_vendor($vendor_id, $vendor_auth_code);
+$api->authorizeVendor($vendorId, $vendorAuthCode);
 ```
 
 Optionally you can set HTTP timeout (default is 30 seconds):
 
 ```php
-$api->set_timeout(60);
+$api->setTimeout(60);
 ```
 
 Both authorization and timeout can be set as well while creating new API object:
 
 ```php
-$api = new \Breadhead\Paddle\Api($vendor_id, $vendor_auth_code, 60);
+$api = new \Breadhead\Paddle\Api($vendorId, $vendorAuthCode, 60);
 ```
 
-Example usage of generate_license() method:
+Example usage of generateLicense() method:
 
 ```php
-// define $vendor_id and $vendor_auth_code first
-$api = new \Breadhead\Paddle\Api($vendor_id, $vendor_auth_code, 60);
-$product_id = 100;
-$license_code = $api->generate_license($product_id);
+// define $vendorId and $vendorAuthCode first
+$api = new \Breadhead\Paddle\Api($vendorId, $vendorAuthCode, 60);
+$productId = 100;
+$licenseCode = $api->generateLicense($productId);
 ```
 
 ## Common exceptions
@@ -78,69 +78,69 @@ All methods can thrown the following exceptions of type \Exception:
 ### Generate pay link for regular product
 
 ```php
-string generate_product_pay_link (int $product_id, [array $optional_arguments = array()])
+string generateProductPayLink (int $productId, [array $optionalArguments = array()])
 ```
 
 #### Parameters
 
-* int $product_id - the id of the product
-* array $optional_arguments - an associative array of optional parameters:
+* int $productId - the id of the product
+* array $optionalArguments - an associative array of optional parameters:
  * string 'title' - override product title 
- * string 'image_url' - override product image 
+ * string 'imageUrl' - override product image 
  * float 'price' - overrride product price 
- * string 'return_url' - url to redirect to after transaction is complete 
+ * string 'returnUrl' - url to redirect to after transaction is complete 
  * bool 'discountable' - whether coupon can be apply to checkout by user 
- * string 'coupon_code' - discount coupon code 
- * bool 'locker_visible' - whether product is visible in user's locker 
- * bool 'quantity_variable' - whether product quantity can be changed by user 
- * string 'paypal_cancel_url' - url to redirect to when paypal transaction was canceled 
+ * string 'couponCode' - discount coupon code 
+ * bool 'lockerVisible' - whether product is visible in user's locker 
+ * bool 'quantityVariable' - whether product quantity can be changed by user 
+ * string 'paypalCancelUrl' - url to redirect to when paypal transaction was canceled 
  * int 'expires' - checkout expiration date, timestamp 
- * bool 'is_popup' - whether checkout is being displayed as popup 
- * string 'parent_url' - url to redirect to when close button on checkout popup is clicked 
+ * bool 'isPopup' - whether checkout is being displayed as popup 
+ * string 'parentUrl' - url to redirect to when close button on checkout popup is clicked 
  * array 'affiliates' - every element should contain affiliate_id as key, and affiliate_commission as value. 
  * Commission value should be float, so commission '0.1' equals 10%. 
  * array 'stylesheets' - every element should contain stylesheet type as key, and code as value 
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
+* code: 300 message: '$productId must be a positive integer' 
 * code: 301 message: '$title must be a string' 
-* code: 302 message: '$image_url must be a valid url' 
+* code: 302 message: '$imageUrl must be a valid url' 
 * code: 303 message: '$price must be a number' 
 * code: 304 message: '$price must not be negative' 
-* code: 305 message: '$return_url must be a valid url' 
-* code: 306 message: '$paypal_cancel_url must be a valid url' 
+* code: 305 message: '$returnUrl must be a valid url' 
+* code: 306 message: '$paypalCancelUrl must be a valid url' 
 * code: 307 message: '$expires must be a valid timestamp' 
 * code: 308 message: '$expires must be in the future' 
-* code: 309 message: '$parent_url must be a valid url' 
+* code: 309 message: '$parentUrl must be a valid url' 
 * code: 310 message: '$affiliates must be an array' 
-* code: 311 message: 'provide $affiliates as key->value contained array with vendor_id->vendor_commission' 
+* code: 311 message: 'provide $affiliates as key->value contained array with vendorId->vendorCommission' 
 * code: 312 message: '$stylesheets must be an array' 
-* code: 313 message: 'provide $stylesheets as key->value contained array with stylesheet_type->stylesheet_code' 
-* code: 314 message: '$webhook_url can only be set for custom product' 
+* code: 313 message: 'provide $stylesheets as key->value contained array with stylesheetType->stylesheetCode' 
+* code: 314 message: '$webhookUrl can only be set for custom product' 
 
 ---
 
 ### Generate pay link for custom (not existing in Paddle database) product
 
 ```php
-string generate_custom_product_pay_link (string $title, float $price, string $image_url, string $webhook_url, array $optional_arguments)
+string generateCustomProductPayLink (string $title, float $price, string $imageUrl, string $webhookUrl, array $optionalArguments)
 ```
 
 #### Parameters
 
 * string $title - title of custom product
 * float $price - price of custom product
-* string $image_url - image of custom product
-* string $webhook_url - webhook_url of custom product
-* array $optional_arguments - an associative array of optional parameters:
- * string 'return_url' - url to redirect to after transaction is complete 
- * bool 'locker_visible' - whether product is visible in user's locker 
- * bool 'quantity_variable' - whether product quantity can be changed by user 
- * string 'paypal_cancel_url' - url to redirect to when paypal transaction was canceled 
+* string $imageUrl - image of custom product
+* string $webhookUrl - webhook_url of custom product
+* array $optionalArguments - an associative array of optional parameters:
+ * string 'returnUrl' - url to redirect to after transaction is complete 
+ * bool 'lockerVisible' - whether product is visible in user's locker 
+ * bool 'quantityVariable' - whether product quantity can be changed by user 
+ * string 'paypalCancelUrl' - url to redirect to when paypal transaction was canceled 
  * int 'expires' - checkout expiration date, timestamp 
- * bool 'is_popup' - whether checkout is being displayed as popup 
- * string 'parent_url' - url to redirect to when close button on checkout popup is clicked 
+ * bool 'isPopup' - whether checkout is being displayed as popup 
+ * string 'parentUrl' - url to redirect to when close button on checkout popup is clicked 
  * array 'affiliates' - every element should contain affiliate_id as key, and affiliate_commission as value. 
  * Commission value should be float, so commission '0.1' equals 10%. 
  * array 'stylesheets' - every element should contain stylesheet type as key, and code as value 
@@ -148,45 +148,45 @@ string generate_custom_product_pay_link (string $title, float $price, string $im
 #### Validation exceptions of type \InvalidArgumentException
 
 * code: 301 message: '$title must be a string' 
-* code: 302 message: '$image_url must be a valid url' 
+* code: 302 message: '$imageUrl must be a valid url' 
 * code: 303 message: '$price must be a number' 
 * code: 304 message: '$price must not be negative' 
-* code: 305 message: '$return_url must be a valid url' 
-* code: 306 message: '$paypal_cancel_url must be a valid url' 
+* code: 305 message: '$returnUrl must be a valid url' 
+* code: 306 message: '$paypalCancelUrl must be a valid url' 
 * code: 307 message: '$expires must be a valid timestamp' 
 * code: 308 message: '$expires must be in the future' 
-* code: 309 message: '$parent_url must be a valid url' 
+* code: 309 message: '$parentUrl must be a valid url' 
 * code: 310 message: '$affiliates must be an array' 
-* code: 311 message: 'provide $affiliates as key->value contained array with vendor_id->vendor_commission' 
+* code: 311 message: 'provide $affiliates as key->value contained array with vendorId->vendorCommission' 
 * code: 312 message: '$stylesheets must be an array' 
-* code: 313 message: 'provide $stylesheets as key->value contained array with stylesheet_type->stylesheet_code' 
-* code: 315 message: '$webhook_url must be a valid url' 
+* code: 313 message: 'provide $stylesheets as key->value contained array with stylesheetType->stylesheetCode' 
+* code: 315 message: '$webhookUrl must be a valid url' 
 * code: 316 message: '$discountable is not allowed for custom product' 
-* code: 317 message: '$coupon_code is not allowed for custom product' 
-* code: 318 message: '$product_id is not allowed for custom product' 
+* code: 317 message: '$couponCode is not allowed for custom product' 
+* code: 318 message: '$productId is not allowed for custom product' 
 
 ---
 
 ### Generate license code for framework product
 
 ```php
-string generate_license (int $product_id)
+string generateLicense (int $productId)
 ```
 
 #### Parameters
 
-* int $product_id - the id of the product
+* int $productId - the id of the product
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
+* code: 300 message: '$productId must be a positive integer' 
 
 ---
 
 ### Get paginated list of products including details of each product
 
 ```php
-array get_products ([int $limit = 1], [int $offset = 0])
+array getProducts ([int $limit = 1], [int $offset = 0])
 ```
 
 #### Parameters
@@ -204,8 +204,8 @@ Returned array contains:
 * int 'id' - id of the product
 * string 'name' - name of the product
 * string 'description' - description of the product
-* float 'base_price' - base price of the product
-* float 'sale_price' - sale price of the product
+* float 'basePrice' - base price of the product
+* float 'salePrice' - sale price of the product
 * array 'screenshots' - screenshots of the product
 * string 'icon' - image of the product
 
@@ -219,22 +219,22 @@ Returned array contains:
 ### Get an array of customers details
 
 ```php
-array generate_customers_report ([int $product_id = null])
+array generateCustomersReport ([int $productId = null])
 ```
 
 #### Parameters
-* int $product_id - the id of product for which report will be created, if not provided report will contain all products data
+* int $productId - the id of product for which report will be created, if not provided report will contain all products data
 
 #### Return Values
 
 Returned array contains:
 
-* string 'full_name' - full name of the customer
+* string 'fullName' - full name of the customer
 * string 'email' - email address of the customer
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
+* code: 300 message: '$productId must be a positive integer' 
 
 ---
 
@@ -243,121 +243,121 @@ Returned array contains:
 Activations are reportable the day after they occur - so any activations from today will not be included
 
 ```php
-array generate_license_activations_report ([int $product_id = null], [int $start_timestamp = null], [int $end_timestamp = null])
+array generateLicenseActivationsReport ([int $productId = null], [int $startTimestamp = null], [int $endTimestamp = null])
 ```
 
 #### Parameters
-* int $product_id - the id of product for which report will be created, if not provided report will contain all products data
-* int $start_timestamp - report start time
-* int $end_timestamp - report end date
+* int $productId - the id of product for which report will be created, if not provided report will contain all products data
+* int $startTimestamp - report start time
+* int $endTimestamp - report end date
 
 #### Return Values
 
 Returned array contains:
 
-* string 'license_code' - license code
-* string 'activation_date' - activation date
-* string 'customer_ip' - customer ip
-* string 'customer_email' - customer email
+* string 'licenseCode' - license code
+* string 'activationDate' - activation date
+* string 'customerIp' - customer ip
+* string 'customerEmail' - customer email
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
-* code: 321 message: '$start_timestamp must be a timestamp' 
-* code: 322 message: '$end_timestamp must be a timestamp' 
+* code: 300 message: '$productId must be a positive integer' 
+* code: 321 message: '$startTimestamp must be a timestamp' 
+* code: 322 message: '$endTimestamp must be a timestamp' 
 
 ---
 
 ### Get an array of orders details
 
 ```php
-array generate_orders_report ([int $product_id = null], [int $start_timestamp = null], [int $end_timestamp = null])
+array generateOrdersReport ([int $productId = null], [int $startTimestamp = null], [int $endTimestamp = null])
 ```
 
 #### Parameters
-* int $product_id - the id of product for which report will be created, if not provided report will contain all products data
-* int $start_timestamp - report start time
-* int $end_timestamp - report end date
+* int $productId - the id of product for which report will be created, if not provided report will contain all products data
+* int $startTimestamp - report start time
+* int $endTimestamp - report end date
 
 #### Return Values
 
 Returned array contains:
 
-* int 'order_id' - id of the order
-* string 'product_name' - name of the product
-* float 'your_earnings' - your earnings
-* string 'earnings_currency' - earnings currency
-* string 'sale_date' - sale date
+* int 'orderId' - id of the order
+* string 'productName' - name of the product
+* float 'yourEarnings' - your earnings
+* string 'earningsCurrency' - earnings currency
+* string 'saleDate' - sale date
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
-* code: 321 message: '$start_timestamp must be a timestamp' 
-* code: 322 message: '$end_timestamp must be a timestamp' 
+* code: 300 message: '$productId must be a positive integer' 
+* code: 321 message: '$startTimestamp must be a timestamp' 
+* code: 322 message: '$endTimestamp must be a timestamp' 
 
 ---
 
 ### Get an array of sent licenses details
 
 ```php
-array generate_sent_licenses_report ([int $product_id = null])
+array generateSentLicensesReport ([int $productId = null])
 ```
 
 #### Parameters
-* int $product_id - the id of product for which report will be created, if not provided report will contain all products data
+* int $productId - the id of product for which report will be created, if not provided report will contain all products data
 
 #### Return Values
 
 Returned array contains:
 
-* string 'customer_name' - full name of the customer
-* string 'customer_email' - email address of the customer
-* string 'product_name' - name of the product
-* string 'license_code' - license code
+* string 'customerName' - full name of the customer
+* string 'customerEmail' - email address of the customer
+* string 'productName' - name of the product
+* string 'licenseCode' - license code
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 300 message: '$product_id must be a positive integer' 
+* code: 300 message: '$productId must be a positive integer' 
 
 ---
 
 ### Generate credentials to be used to call other API methods
 
 ```php
-array generate_auth_code (string $vendor_email, string $vendor_password)
+array generateAuthCode (string $vendorEmail, string $vendorPassword)
 ```
 
 #### Parameters
-* string $vendor_email
-* string $vendor_password
+* string $vendorEmail
+* string $vendorPassword
 
 #### Return Values
 
 Returned array contains:
 
-* int 'vendor_id'
-* string 'vendor_auth_code'
+* int 'vendorId'
+* string 'vendorAuthCode'
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 323 message: '$vendor_email must be valid' 
+* code: 323 message: '$vendorEmail must be valid' 
 
 ---
 
 ### Register external application and receive auth code, that application can use to call API methods
 
 ```php
-string register_external_application (string $application_name, string $application_description, string $application_icon_url)
+string registerExternalApplication (string $applicationName, string $applicationDescription, string $applicationIconUrl)
 ```
 
 #### Validation exceptions of type \InvalidArgumentException
 
-* code: 324 message: '$application_icon_url must be a valid url' 
+* code: 324 message: '$applicationIconUrl must be a valid url' 
 
 ---
 
 ### Get vendor public key
 
 ```php
-string get_vendor_public_key ()
+string getVendorPublicKey ()
 ```
