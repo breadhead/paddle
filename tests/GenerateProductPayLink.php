@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/test_case.php';
 
-class Generate_Product_Pay_Link extends Test_Case {
+class GenerateProductPayLink extends Test_Case {
 
 	public function test_valid_arguments() {
 		$data = array(
@@ -11,7 +11,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 			'price' => 10,
 			'return_url' => 'http://example.com',
 			'discountable' => true,
-			'coupon_code' => $this->productCouponCode,
+			'coupon_code' => $this->product_coupon_code,
 			'locker_visible' => true,
 			'quantity_variable' => true,
 			'paypal_cancel_url' => 'http://example.com',
@@ -19,15 +19,15 @@ class Generate_Product_Pay_Link extends Test_Case {
 			'is_popup' => true,
 			'parent_url' => 'http://example.com',
 			'affiliates' => array(
-				$this->affiliateId => $this->affiliateCommission
+				$this->affiliate_id => $this->affiliate_commission
 			),
 			'stylesheets' => array(
-				$this->vendorStylesheetType => $this->vendorStylesheetIdentifier
+				$this->vendor_stylesheet_type => $this->vendor_stylesheet_identifier
 			)
 		);
 
 		// check if valid paylink was returned by api
-		$url = $this->api->generateProductPayLink($this->productId, $data);
+		$url = $this->api->generateProductPayLink($this->product_id, $data);
 		$this->assertEquals($url, filter_var($url, FILTER_VALIDATE_URL));
 
 		$data = array(
@@ -38,11 +38,11 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		// check if valid paylink was returned by api
-		$url = $this->api->generateProductPayLink($this->productId, $data);
+		$url = $this->api->generateProductPayLink($this->product_id, $data);
 		$this->assertEquals($url, filter_var($url, FILTER_VALIDATE_URL));
 	}
 
-	public function invalidProductIdDataProvider() {
+	public function invalid_product_id_data_provider() {
 		return array(
 			array('string'),
 			array(0),
@@ -55,14 +55,14 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidProductIdDataProvider
+	 * @dataProvider invalid_product_id_data_provider
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
 		$this->api->generateProductPayLink($id);
 	}
 
-	public function invalidTitleDataProvider() {
+	public function invalid_title_data_provider() {
 		return array(
 			array(100),
 			array(true),
@@ -73,7 +73,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidTitleDataProvider
+	 * @dataProvider invalid_title_data_provider
 	 */
 	public function test_invalid_title($title) {
 		$data = array(
@@ -81,7 +81,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_301, 301);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	public function test_forbidden_webhook_url() {
@@ -90,11 +90,11 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_314, 314);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	/**
-	 * @dataProvider invalidUrlDataProvider
+	 * @dataProvider invalid_url_data_provider
 	 */
 	public function test_invalid_image_url($url) {
 		$data = array(
@@ -102,10 +102,10 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_302, 302);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function nonNumericPriceDataProvider() {
+	public function non_numeric_price_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -116,7 +116,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider nonNumericPriceDataProvider
+	 * @dataProvider non_numeric_price_data_provider
 	 */
 	public function test_non_numeric_price($price) {
 		$data = array(
@@ -124,7 +124,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_303, 303);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	public function test_negative_price() {
@@ -133,11 +133,11 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_304, 304);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	/**
-	 * @dataProvider invalidUrlDataProvider
+	 * @dataProvider invalid_url_data_provider
 	 */
 	public function test_invalid_return_url($url) {
 		$data = array(
@@ -145,11 +145,11 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_305, 305);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	/**
-	 * @dataProvider invalidUrlDataProvider
+	 * @dataProvider invalid_url_data_provider
 	 */
 	public function test_invalid_paypal_cancel_url($url) {
 		$data = array(
@@ -157,10 +157,10 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_306, 306);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function invalidExpiresDataProvider() {
+	public function invalid_expires_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -169,7 +169,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidExpiresDataProvider
+	 * @dataProvider invalid_expires_data_provider
 	 */
 	public function test_invalid_expires($expires) {
 		$data = array(
@@ -177,7 +177,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_307, 307);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	public function test_past_expires() {
@@ -186,11 +186,11 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_308, 308);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 	/**
-	 * @dataProvider invalidUrlDataProvider
+	 * @dataProvider invalid_url_data_provider
 	 */
 	public function test_invalid_parent_url($url) {
 		$data = array(
@@ -198,10 +198,10 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_309, 309);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function notArrayAffiliatesDataProvider() {
+	public function not_array_affiliates_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -211,7 +211,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider notArrayAffiliatesDataProvider
+	 * @dataProvider not_array_affiliates_data_provider
 	 */
 	public function test_not_array_affiliates($affiliates) {
 		$data = array(
@@ -219,28 +219,28 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_310, 310);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function invalidArrayAffiliatesDataProvider() {
+	public function ivnalid_array_affiliates_data_provider() {
 		return array(
 			array(array('foo' => null))
 		);
 	}
 
 	/**
-	 * @dataProvider invalidArrayAffiliatesDataProvider
+	 * @dataProvider ivnalid_array_affiliates_data_provider
 	 */
-	public function invalid_array_array_affiliates($affiliates) {
+	public function ivnalid_array_array_affiliates($affiliates) {
 		$data = array(
 			'affiliates' => $affiliates
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_311, 311);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function notArrayStylesheetsDataProvider() {
+	public function not_array_stylesheets_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -250,7 +250,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider notArrayStylesheetsDataProvider
+	 * @dataProvider not_array_stylesheets_data_provider
 	 */
 	public function test_not_array_invalid_stylesheets($stylesheets) {
 		$data = array(
@@ -258,17 +258,17 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_312, 312);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
-	public function invalidArrayStylesheetsDataProvider() {
+	public function invalid_array_stylesheets_data_provider() {
 		return array(
 			array(array(1))
 		);
 	}
 
 	/**
-	 * @dataProvider invalidArrayStylesheetsDataProvider
+	 * @dataProvider invalid_array_stylesheets_data_provider
 	 */
 	public function test_invalid_array_stylesheets($stylesheets) {
 		$data = array(
@@ -276,7 +276,7 @@ class Generate_Product_Pay_Link extends Test_Case {
 		);
 
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_313, 313);
-		$this->api->generateProductPayLink($this->productId, $data);
+		$this->api->generateProductPayLink($this->product_id, $data);
 	}
 
 }

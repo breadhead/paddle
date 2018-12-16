@@ -2,11 +2,11 @@
 
 require_once __DIR__ . '/test_case.php';
 
-class Generate_License_Activations_Report extends Test_Case {
+class GenerateLicenseActivationsReport extends Test_Case {
 
 	public function test_valid_arguments() {
 		$this->assertTrue(is_array(
-				$this->api->generateLicenseActivationsReport($this->productId)
+				$this->api->generateLicenseActivationsReport($this->product_id)
 		));
 		$this->assertTrue(is_array(
 				$this->api->generateLicenseActivationsReport()
@@ -36,7 +36,7 @@ class Generate_License_Activations_Report extends Test_Case {
 		$this->api->generateLicenseActivationsReport($id);
 	}
 
-	public function invalidTimestampDataProvider() {
+	public function invalid_timestamp_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -47,19 +47,19 @@ class Generate_License_Activations_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidTimestampDataProvider
+	 * @dataProvider invalid_timestamp_data_provider
 	 */
-	public function test_invalid_start_timestamp($startTimestamp) {
+	public function test_invalid_start_timestamp($start_timestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_321, 321);
-		$this->api->generateLicenseActivationsReport(null, $startTimestamp);
+		$this->api->generateLicenseActivationsReport(null, $start_timestamp);
 	}
 
 	/**
 	 * @dataProvider invalid_timestamp_data_provider
 	 */
-	public function test_invalid_end_timestamp($endTimestamp) {
+	public function test_invalid_end_timestamp($end_timestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_322, 322);
-		$this->api->generateLicenseActivationsReport(null, null, $endTimestamp);
+		$this->api->generateLicenseActivationsReport(null, null, $end_timestamp);
 	}
 
 }

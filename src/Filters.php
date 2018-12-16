@@ -9,184 +9,112 @@ namespace Breadhead\Paddle;
  */
 class Filters {
 
-    /**
-     * @param int $value
-     * @return int
-     * @throws \InvalidArgumentException
-     */
-    public static function filterProductId($value) {
+	public static function filter_product_id($value) {
 		if (
 			(!filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1))) || !is_numeric($value))
 		) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_300, 300);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param string $value
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterTitle($value) {
+	public static function filter_title($value) {
 		if (!is_string($value)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_301, 301);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param string $value
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterImageUrl($value) {
+	public static function filter_image_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_302, 302);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param int $value
-     * @return int
-     * @throws \InvalidArgumentException
-     */
-    public static function filterPrice($value) {
+	public static function filter_price($value) {
 		if (!is_numeric($value)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_303, 303);
 		} elseif ($value < 0) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_304, 304);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param string $value - url
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterReturnUrl($value) {
+	public static function filter_return_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_305, 305);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param $value
-     * @return int
-     */
-    public static function filterDiscountable($value) {
+	public static function filter_discountable($value) {
 		return ($value) ? 1 : 0;
 	}
 
-    /**
-     * @param $value
-     * @return int
-     */
-    public static function filterLockerVisible($value) {
+	public static function filter_locker_visible($value) {
 		return ($value) ? 1 : 0;
 	}
 
-    /**
-     * @param $value
-     * @return int
-     */
-    public static function filterQuantityVariable($value) {
+	public static function filter_quantity_variable($value) {
 		return ($value) ? 1 : 0;
 	}
 
-    /**
-     * @param $value
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
-    public static function filterPaypalCancelUrl($value) {
+	public static function filter_paypal_cancel_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_306, 306);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param $value
-     * @return false|string - date
-     * @throws \InvalidArgumentException
-     */
-    public static function filterExpires($value) {
+	public static function filter_expires($value) {
 		if ((!filter_var($value, FILTER_VALIDATE_INT) || !is_numeric($value))) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_307, 307);
 		} else if ($value < time()) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_308, 308);
 		} else {
-
 			return date('Y-m-d', $value);
 		}
 	}
 
-    /**
-     * @param $value
-     * @return null|string
-     */
-    public static function filterIsPopup($value) {
+	public static function filter_is_popup($value) {
 		return ($value) ? 'true' : null;
 	}
 
-    /**
-     * @param $value
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
-    public static function filterParentUrl($value) {
+	public static function filter_parent_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_309, 309);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param array $value
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public static function filterAffiliates($value) {
+	public static function filter_affiliates($value) {
 		if (!is_array($value)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_310, 310);
 		}
+
 		$affiliates = array();
-		foreach ($value as $key => $v) {
+
+		foreach ($value as $key => $value) {
 			// validate affiliates array structure
-			if (empty($key) || empty($v)) {
+			if (empty($key) || empty($value)) {
 				throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_311, 311);
 			}
 
-			$affiliates[] = $key . ':' . $v;
+			$affiliates[] = $key . ':' . $value;
 		}
 
 		return $affiliates;
 	}
 
-    /**
-     * @param array $value
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    public static function filterStylesheets($value) {
+	public static function filter_stylesheets($value) {
 		if (!is_array($value)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_312, 312);
 		}
@@ -201,104 +129,62 @@ class Filters {
 		return $value;
 	}
 
-    /**
-     * @param string $value - url
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterWebhookUrl($value) {
+	public static function filter_webhook_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_315, 315);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param int $value
-     * @return int
-     * @throws \InvalidArgumentException
-     */
-    public static function filterLimit($value) {
+	public static function filter_limit($value) {
 		if (!is_int($value) || $value < 1) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_319, 319);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param int $value
-     * @return int
-     * @throws \InvalidArgumentException
-     */
-    public static function filterOffset($value) {
+	public static function filter_offset($value) {
 		if (!is_int($value) || $value < 0) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_320, 320);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param int $value - timestamp
-     * @return false|string - date
-     * @throws \InvalidArgumentException
-     */
-    public static function filterStartTimestamp($value) {
+	public static function filter_start_timestamp($value) {
 		if (
 			(!filter_var($value, FILTER_VALIDATE_INT) || !is_numeric($value))
 		) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_321, 321);
 		} else {
-
 			return date('Y-m-d H:i:s', $value);
 		}
 	}
 
-    /**
-     * @param int $value - timestamp
-     * @return false|string - date
-     * @throws \InvalidArgumentException
-     */
-    public static function filterEndTimestamp($value) {
+	public static function filter_end_timestamp($value) {
 		if (
 			(!filter_var($value, FILTER_VALIDATE_INT) || !is_numeric($value))
 		) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_322, 322);
 		} else {
-
 			return date('Y-m-d H:i:s', $value);
 		}
 	}
 
-    /**
-     * @param string $value
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterEmail($value) {
+	public static function filter_email($value) {
 		if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_323, 323);
 		} else {
-
 			return $value;
 		}
 	}
 
-    /**
-     * @param string $value
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public static function filterApplicationIconUrl($value) {
+	public static function filter_application_icon_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_324, 324);
 		} else {
-
 			return $value;
 		}
 	}

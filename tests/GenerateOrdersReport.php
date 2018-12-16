@@ -2,11 +2,11 @@
 
 require_once __DIR__ . '/test_case.php';
 
-class Generate_Orders_Report extends Test_Case {
+class GenerateOrdersReport extends Test_Case {
 
 	public function test_valid_arguments() {
 		$this->assertTrue(is_array(
-				$this->api->generateOrdersReport($this->productId)
+				$this->api->generateOrdersReport($this->product_id)
 		));
 		$this->assertTrue(is_array(
 				$this->api->generateOrdersReport()
@@ -16,7 +16,7 @@ class Generate_Orders_Report extends Test_Case {
 		));
 	}
 
-	public function invalidProductIdDataProvider() {
+	public function invalid_product_id_data_provider() {
 		return array(
 			array('string'),
 			array(0),
@@ -29,14 +29,14 @@ class Generate_Orders_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidProductIdDataProvider
+	 * @dataProvider invalid_product_id_data_provider
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
 		$this->api->generateOrdersReport($id);
 	}
 
-	public function invalidTimestampDataProvider() {
+	public function invalid_timestamp_data_provider() {
 		return array(
 			array('string'),
 			array(true),
@@ -47,19 +47,19 @@ class Generate_Orders_Report extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidTimestampDataProvider
+	 * @dataProvider invalid_timestamp_data_provider
 	 */
-	public function test_invalid_start_timestamp($startTimestamp) {
+	public function test_invalid_start_timestamp($start_timestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_321, 321);
-		$this->api->generateOrdersReport(null, $startTimestamp);
+		$this->api->generateOrdersReport(null, $start_timestamp);
 	}
 
 	/**
-	 * @dataProvider invalidTimestampDataProvider
+	 * @dataProvider invalid_timestamp_data_provider
 	 */
-	public function test_invalid_end_timestamp($endTimestamp) {
+	public function test_invalid_end_timestamp($end_timestamp) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_322, 322);
-		$this->api->generateOrdersReport(null, null, $endTimestamp);
+		$this->api->generateOrdersReport(null, null, $end_timestamp);
 	}
 
 }

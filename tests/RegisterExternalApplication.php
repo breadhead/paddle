@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/test_case.php';
 
-class Register_External_Application extends Test_Case {
+class registerExternalApplication extends Test_Case {
 
 	private $name = 'test name';
 	private $description = 'test description';
@@ -14,7 +14,7 @@ class Register_External_Application extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidUrlDataProvider
+	 * @dataProvider invalid_url_data_provider
 	 */
 	public function test_invalid_application_icon_url($icon) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_324, 324);

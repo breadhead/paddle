@@ -2,14 +2,14 @@
 
 require_once __DIR__ . '/test_case.php';
 
-class Generate_License extends Test_Case {
+class GenerateLicense extends Test_Case {
 
 	public function test_valid_arguments() {
-		$license_code = $this->api->generateLicense($this->frameworkProductId);
+		$license_code = $this->api->generateLicense($this->framework_product_id);
 		$this->assertTrue(is_string($license_code));
 	}
 
-	public function invalidProductIdDataProvider() {
+	public function invalid_product_id_data_provider() {
 		return array(
 			array('string'),
 			array(0),
@@ -22,7 +22,7 @@ class Generate_License extends Test_Case {
 	}
 
 	/**
-	 * @dataProvider invalidProductIdDataProvider
+	 * @dataProvider invalid_product_id_data_provider
 	 */
 	public function test_invalid_product_id($id) {
 		$this->setExpectedException('InvalidArgumentException', Breadhead\Paddle\Api::ERR_300, 300);
