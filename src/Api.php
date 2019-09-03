@@ -38,6 +38,8 @@ class Api {
     const ERR_115 = 'Invalid or missing affiliate commision';
     const ERR_116 = 'One or more required arguments are missing';
     const ERR_117 = 'Provided expiration time is incorrect';
+    const ERR_118 = 'Price is too low';
+    const ERR_119 = 'Unable to find requested subscription';
 
     /*
      * 2XX - general errors

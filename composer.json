@@ -4,7 +4,7 @@
 	"description": "Breadhead version of Paddle.com API PHP library",
 	"homepage": "https://github.com/breadhead/paddle",
 	"license": "MIT",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"require": {
 		"php": ">=7.0.0",
 		"ext-curl": "*"
