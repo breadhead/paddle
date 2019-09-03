@@ -491,5 +491,25 @@ class Api {
 
         return $this->httpCall('/subscription/plans', 'POST', $data);
     }
-    
+
+    public function cancelSubscription(string $subscriptionId)
+    {
+        $data = [
+            'subscription_id' => $subscriptionId
+        ];
+
+        return $this->httpCall('/subscription/users_cancel', 'POST', $data);
+    }
+
+    public function getWebkookHistory(?int $page = null, ?int $limit = null)
+    {
+        $data = [
+            'page' => $page ? : 1,
+            'alerts_per_page' => $limit ? : 40
+        ];
+
+        return $this->httpCall('/alert/webhooks', 'POST', $data);
+
+    }
+
 }
