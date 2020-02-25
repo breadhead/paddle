@@ -35,15 +35,35 @@ class Filters {
 		}
 	}
 
+	/** @deprecated use filterPrice */
 	public static function filter_price($value) {
-		if (!is_numeric($value)) {
-			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_303, 303);
-		} elseif ($value < 0) {
-			throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_304, 304);
-		} else {
-			return $value;
-		}
+		return self::filterPrice($value);
 	}
+
+    public static function filterPrice($value) {
+        if (!is_numeric($value)) {
+            throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_303, 303);
+        } elseif ($value < 0) {
+            throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_304, 304);
+        } else {
+            return $value;
+        }
+    }
+
+    public static function filterPrices(array $values) {
+	    return array_filter(
+            $values,
+            function($val){
+                $res = explode(':', $val);
+                
+                if (count($res) <> 2 || (!is_float($res[1]) && !is_numeric($res[1])) || $res[1] < 0) {
+                    throw new \InvalidArgumentException(\Breadhead\Paddle\Api::ERR_139, 139);
+                }
+
+                return true;
+            }
+        );
+    }
 
 	public static function filter_return_url($value) {
 		if (!filter_var($value, FILTER_VALIDATE_URL)) {
