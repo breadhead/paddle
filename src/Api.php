@@ -40,6 +40,8 @@ class Api {
     const ERR_117 = 'Provided expiration time is incorrect';
     const ERR_118 = 'Price is too low';
     const ERR_119 = 'Unable to find requested subscription';
+    const ERR_139 = 'The given prices format is not valid. The prices must have the format of [‘currency:amount’, ‘currency:amount’, …]';
+    const ERR_149 = 'The plan interval is invalid';
 
     /*
      * 2XX - general errors
@@ -53,7 +55,7 @@ class Api {
     /*
      * 3XX - validation errors
      */
-    const ERR_300 = '$product_id must be a positive integer';
+    const ERR_300 = '$productId must be a positive integer';
     const ERR_301 = '$title must be a string';
     const ERR_302 = '$image_url must be a valid url';
     const ERR_303 = '$price must be a number';
@@ -71,11 +73,11 @@ class Api {
     const ERR_315 = '$webhook_url must be a valid url';
     const ERR_316 = '$discountable is not allowed for custom product';
     const ERR_317 = '$coupon_code is not allowed for custom product';
-    const ERR_318 = '$product_id is not allowed for custom product';
+    const ERR_318 = '$productId is not allowed for custom product';
     const ERR_319 = '$limit must be a positive integer';
     const ERR_320 = '$offset must be a non negative integer';
-    const ERR_321 = '$start_timestamp must be a timestamp';
-    const ERR_322 = '$end_timestamp must be a timestamp';
+    const ERR_321 = '$startTimestamp must be a timestamp';
+    const ERR_322 = '$endTimestamp must be a timestamp';
     const ERR_323 = '$vendor_email must be valid';
     const ERR_324 = '$application_icon_url must be a valid url';
 
@@ -146,25 +148,25 @@ class Api {
             throw new \Exception(self::ERR_201 . $http_status, 201);
         }
 
-        $arr_api_response = json_decode($str_api_response, true);
+        $apiResponse = json_decode($str_api_response, true);
 
         // check if api response is well-formed
-        if (!is_array($arr_api_response)) {
+        if (!is_array($apiResponse)) {
             throw new \Exception(self::ERR_202 . $str_api_response, 202);
         }
 
         // check is api response is correct
-        if ($arr_api_response['success'] !== true) {
-            throw new \Exception('API error: ' . constant('self::ERR_' . $arr_api_response['error']['code']), $arr_api_response['error']['code']);
+        if ($apiResponse['success'] !== true) {
+            throw new \Exception('API error: ' . constant('self::ERR_' . $apiResponse['error']['code']), $apiResponse['error']['code']);
         }
 
-        return $arr_api_response['response'];
+        return $apiResponse['response'];
     }
 
     /**
      * Generate pay link for regular product
-     * @param int $product_id - the id of the product
-     * @param array $optional_arguments - an associative array of optional parameters:
+     * @param int $productId - the id of the product
+     * @param array $optionalArguments - an associative array of optional parameters:
      * - string 'title' - override product title
      * - string 'image_url' - override product image
      * - float 'price' - override product price
@@ -182,57 +184,80 @@ class Api {
      * - array 'stylesheets' - every element should contain stylesheet type as key, and code as value
      * @return string - pay link
      */
-    public function generateProductPayLink($product_id, array $optional_arguments = array()) {
+    public function generateProductPayLink($productId, array $optionalArguments = array()) {
 
         $data = [];
-        $data['product_id'] = Filters::filter_product_id($product_id);
-        if (isset($optional_arguments['title'])) {
-            $data['title'] = Filters::filter_title($optional_arguments['title']);
+        $data['product_id'] = Filters::filter_product_id($productId);
+        if (isset($optionalArguments['title'])) {
+            $data['title'] = Filters::filter_title($optionalArguments['title']);
         }
-        if (isset($optional_arguments['image_url'])) {
-            $data['image_url'] = Filters::filter_image_url($optional_arguments['image_url']);
+        if (isset($optionalArguments['image_url'])) {
+            $data['image_url'] = Filters::filter_image_url($optionalArguments['image_url']);
         }
-        if (isset($optional_arguments['price'])) {
-            $data['price'] = Filters::filter_price($optional_arguments['price']);
+        if (isset($optionalArguments['price'])) {
+            $data['price'] = Filters::filterPrice($optionalArguments['price']);
         }
-        if (isset($optional_arguments['return_url'])) {
-            $data['return_url'] = Filters::filter_return_url($optional_arguments['return_url']);
+
+        if (isset($optionalArguments['prices'])) {
+            $data['prices'] = Filters::filterPrices($optionalArguments['prices']);
         }
-        if (isset($optional_arguments['discountable'])) {
-            $data['discountable'] = Filters::filter_discountable($optional_arguments['discountable']);
+        
+        if (isset($optionalArguments['recurring_prices'])) {
+            $data['recurring_prices'] = Filters::filterPrices($optionalArguments['recurring_prices']);
         }
-        if (isset($optional_arguments['coupon_code'])) {
+        
+        if (isset($optionalArguments['return_url'])) {
+            $data['return_url'] = Filters::filter_return_url($optionalArguments['return_url']);
+        }
+        if (isset($optionalArguments['discountable'])) {
+            $data['discountable'] = Filters::filter_discountable($optionalArguments['discountable']);
+        }
+        if (isset($optionalArguments['coupon_code'])) {
             $data['discountable'] = 1;
         }
-        if (isset($optional_arguments['locker_visible'])) {
-            $data['locker_visible'] = Filters::filter_locker_visible($optional_arguments['locker_visible']);
+        if (isset($optionalArguments['locker_visible'])) {
+            $data['locker_visible'] = Filters::filter_locker_visible($optionalArguments['locker_visible']);
         }
-        if (isset($optional_arguments['quantity_variable'])) {
-            $data['quantity_variable'] = Filters::filter_quantity_variable($optional_arguments['quantity_variable']);
+        if (isset($optionalArguments['quantity_variable'])) {
+            $data['quantity_variable'] = Filters::filter_quantity_variable($optionalArguments['quantity_variable']);
         }
-        if (isset($optional_arguments['paypal_cancel_url'])) {
-            $data['paypal_cancel_url'] = Filters::filter_paypal_cancel_url($optional_arguments['paypal_cancel_url']);
+        if (isset($optionalArguments['quantity'])) {
+            $data['quantity'] = (int)$optionalArguments['quantity'];
         }
-        if (isset($optional_arguments['expires'])) {
-            $data['expires'] = Filters::filter_expires($optional_arguments['expires']);
+        if (isset($optionalArguments['paypal_cancel_url'])) {
+            $data['paypal_cancel_url'] = Filters::filter_paypal_cancel_url($optionalArguments['paypal_cancel_url']);
         }
-        if (isset($optional_arguments['is_popup'])) {
-            $data['is_popup'] = Filters::filter_is_popup($optional_arguments['is_popup']);
+        if (isset($optionalArguments['passthrough'])) {
+            $data['passthrough'] = $optionalArguments['passthrough'];
         }
-        if (isset($optional_arguments['parent_url'])) {
-            $data['parent_url'] = Filters::filter_parent_url($optional_arguments['parent_url']);
+        if (isset($optionalArguments['expires'])) {
+            $data['expires'] = Filters::filter_expires($optionalArguments['expires']);
         }
-        if (isset($optional_arguments['affiliates'])) {
-            $data['affiliates'] = Filters::filter_affiliates($optional_arguments['affiliates']);
+        if (isset($optionalArguments['is_popup'])) {
+            $data['is_popup'] = Filters::filter_is_popup($optionalArguments['is_popup']);
         }
-        if (isset($optional_arguments['stylesheets'])) {
-            $data['stylesheets'] = Filters::filter_stylesheets($optional_arguments['stylesheets']);
+        if (isset($optionalArguments['parent_url'])) {
+            $data['parent_url'] = Filters::filter_parent_url($optionalArguments['parent_url']);
+        }
+        if (isset($optionalArguments['affiliates'])) {
+            $data['affiliates'] = Filters::filter_affiliates($optionalArguments['affiliates']);
+        }
+        if (isset($optionalArguments['stylesheets'])) {
+            $data['stylesheets'] = Filters::filter_stylesheets($optionalArguments['stylesheets']);
+        }
+        if (isset($optionalArguments['customer_email'])) {
+            $data['customer_email'] = $optionalArguments['customer_email'];
+        }
+        if (isset($optionalArguments['customer_country'])) {
+            $data['customer_country'] = $optionalArguments['customer_country'];
         }
         // check if webhook_url is provided (forbidden)
-        if (isset($optional_arguments['webhook_url'])) {
-           // throw new \InvalidArgumentException(\Api::ERR_314, 314);
+        if (isset($optionalArguments['webhook_url'])) {
+            throw new \InvalidArgumentException(\Api::ERR_314, 314);
         }
+
         $response = $this->httpCall('/product/generate_pay_link', 'POST', $data);
+
         return $response['url'];
     }
 
@@ -242,7 +267,7 @@ class Api {
      * @param float $price - price of custom product
      * @param string $image_url - image of custom product
      * @param string $webhook_url - webhook_url of custom product
-     * @param array $optional_arguments - an associative array of optional parameters:
+     * @param array $optionalArguments - an associative array of optional parameters:
      * - string 'return_url' - url to redirect to after transaction is complete
      * - bool 'locker_visible' - whether product is visible in user's locker
      * - bool 'quantity_variable' - whether product quantity can be changed by user
@@ -255,56 +280,56 @@ class Api {
      * - array 'stylesheets' - every element should contain stylesheet type as key, and code as value
      * @return string - pay link
      */
-    public function generateCustomProductPayLink($title, $price, $image_url, $webhook_url, array $optional_arguments) {
+    public function generateCustomProductPayLink($title, $price, $image_url, $webhook_url, array $optionalArguments) {
         $data = [];
         $data['title'] = Filters::filter_title($title);
         $data['price'] = Filters::filter_price($price);
         $data['image_url'] = Filters::filter_image_url($image_url);
         $data['webhook_url'] = Filters::filter_webhook_url($webhook_url);
-        if (isset($optional_arguments['return_url'])) {
-            $data['return_url'] = Filters::filter_return_url($optional_arguments['return_url']);
+        if (isset($optionalArguments['return_url'])) {
+            $data['return_url'] = Filters::filter_return_url($optionalArguments['return_url']);
         }
-        if (isset($optional_arguments['locker_visible'])) {
-            $data['locker_visible'] = Filters::filter_locker_visible($optional_arguments['locker_visible']);
+        if (isset($optionalArguments['locker_visible'])) {
+            $data['locker_visible'] = Filters::filter_locker_visible($optionalArguments['locker_visible']);
         }
-        if (isset($optional_arguments['quantity_variable'])) {
-            $data['quantity_variable'] = Filters::filter_quantity_variable($optional_arguments['quantity_variable']);
+        if (isset($optionalArguments['quantity_variable'])) {
+            $data['quantity_variable'] = Filters::filter_quantity_variable($optionalArguments['quantity_variable']);
         }
-        if (isset($optional_arguments['paypal_cancel_url'])) {
-            $data['paypal_cancel_url'] = Filters::filter_paypal_cancel_url($optional_arguments['paypal_cancel_url']);
+        if (isset($optionalArguments['paypal_cancel_url'])) {
+            $data['paypal_cancel_url'] = Filters::filter_paypal_cancel_url($optionalArguments['paypal_cancel_url']);
         }
-        if (isset($optional_arguments['expires'])) {
-            $data['expires'] = Filters::filter_expires($optional_arguments['expires']);
+        if (isset($optionalArguments['expires'])) {
+            $data['expires'] = Filters::filter_expires($optionalArguments['expires']);
         }
-        if (isset($optional_arguments['is_popup'])) {
-            $data['is_popup'] = Filters::filter_is_popup($optional_arguments['is_popup']);
+        if (isset($optionalArguments['is_popup'])) {
+            $data['is_popup'] = Filters::filter_is_popup($optionalArguments['is_popup']);
         }
-        if (isset($optional_arguments['parent_url'])) {
-            $data['parent_url'] = Filters::filter_parent_url($optional_arguments['parent_url']);
+        if (isset($optionalArguments['parent_url'])) {
+            $data['parent_url'] = Filters::filter_parent_url($optionalArguments['parent_url']);
         }
-        if (isset($optional_arguments['affiliates'])) {
-            $data['affiliates'] = Filters::filter_affiliates($optional_arguments['affiliates']);
+        if (isset($optionalArguments['affiliates'])) {
+            $data['affiliates'] = Filters::filter_affiliates($optionalArguments['affiliates']);
         }
-        if (isset($optional_arguments['stylesheets'])) {
-            $data['stylesheets'] = Filters::filter_stylesheets($optional_arguments['stylesheets']);
+        if (isset($optionalArguments['stylesheets'])) {
+            $data['stylesheets'] = Filters::filter_stylesheets($optionalArguments['stylesheets']);
         }
 
-        if (isset($optional_arguments['passthrough'])) {
-            $data['passthrough'] = $optional_arguments['passthrough'];
+        if (isset($optionalArguments['passthrough'])) {
+            $data['passthrough'] = $optionalArguments['passthrough'];
         }
-        if (isset($optional_arguments['customer_email'])) {
-            $data['customer_email'] = $optional_arguments['customer_email'];
+        if (isset($optionalArguments['customer_email'])) {
+            $data['customer_email'] = $optionalArguments['customer_email'];
         }
         // discountable (forbidden)
-        if (isset($optional_arguments['discountable'])) {
+        if (isset($optionalArguments['discountable'])) {
             throw new \InvalidArgumentException(\Api::ERR_316, 316);
         }
         // coupon_code (forbidden)
-        if (isset($optional_arguments['coupon_code'])) {
+        if (isset($optionalArguments['coupon_code'])) {
             throw new \InvalidArgumentException(\Api::ERR_317, 317);
         }
         // check product_id (forbidden)
-        if (isset($optional_arguments['product_id'])) {
+        if (isset($optionalArguments['product_id'])) {
             throw new \InvalidArgumentException(\Api::ERR_318, 318);
         }
 
@@ -314,13 +339,13 @@ class Api {
 
     /**
      * Generate license code for framework product
-     * @param int $product_id - the id of the product
+     * @param int $productId - the id of the product
      * @return string - license code
      */
-    public function generateLicense($product_id) {
+    public function generateLicense($productId) {
         $data = [];
         
-        $data['product_id'] = Filters::filter_product_id($product_id);
+        $data['product_id'] = Filters::filter_product_id($productId);
         $response = $this->httpCall('/product/generate_license', 'POST', $data);
         
         return $response['license_code'];
@@ -353,23 +378,23 @@ class Api {
 
     /**
      * Get an array of customers details
-     * @param int $product_id - the id of product for which report will be created,
+     * @param int $productId - the id of product for which report will be created,
      * if not provided report will contain all products data
      * @return array - returned array contains:
      * - string 'full_name' - full name of the customer
      * - string 'email' - email address of the customer
      */
-    public function generateCustomersReport($product_id = null) {
+    public function generateCustomersReport($productId = null) {
         $data = [];
-        if (isset($product_id)) {
-            $data['product_id'] = Filters::filter_product_id($product_id);
+        if (isset($productId)) {
+            $data['product_id'] = Filters::filter_product_id($productId);
         }
         return $this->httpCall('/report/customers', 'GET', $data);
     }
 
     /**
      * Get an array of sent licenses details
-     * @param int $product_id - the id of product for which report will be created
+     * @param int $productId - the id of product for which report will be created
      * if not provided report will contain all products data
      * @return array - returned array contains:
      * - string 'customer_name' - full name of the customer
@@ -377,20 +402,20 @@ class Api {
      * - string 'product_name' - name of the product
      * - string 'license_code' - license code
      */
-    public function generateSentLicensesReport($product_id = null) {
+    public function generateSentLicensesReport($productId = null) {
         $data = [];
-        if (isset($product_id)) {
-            $data['product_id'] = Filters::filter_product_id($product_id);
+        if (isset($productId)) {
+            $data['product_id'] = Filters::filter_product_id($productId);
         }
         return $this->httpCall('/report/sent_licenses', 'GET', $data);
     }
 
     /**
      * Get an array of orders details
-     * @param int $product_id - the id of product for which report will be created
+     * @param int $productId - the id of product for which report will be created
      * if not provided report will contain all products data
-     * @param int $start_timestamp - report start time
-     * @param int $end_timestamp - report end date
+     * @param int $startTimestamp - report start time
+     * @param int $endTimestamp - report end date
      * @return array - returned array contains:
      * - int 'order_id' - id of the order
      * - string 'product_name' - name of the product
@@ -398,16 +423,16 @@ class Api {
      * - string 'earnings_currency' - earnings currency
      * - string 'sale_date' - sale date
      */
-    public function generateOrdersReport($product_id = null, $start_timestamp = null, $end_timestamp = null) {
+    public function generateOrdersReport($productId = null, $startTimestamp = null, $endTimestamp = null) {
         $data = [];
-        if (isset($product_id)) {
-            $data['product_id'] = Filters::filter_product_id($product_id);
+        if (isset($productId)) {
+            $data['product_id'] = Filters::filter_product_id($productId);
         }
-        if (isset($start_timestamp)) {
-            $data['from_date'] = Filters::filter_start_timestamp($start_timestamp);
+        if (isset($startTimestamp)) {
+            $data['from_date'] = Filters::filter_start_timestamp($startTimestamp);
         }
-        if (isset($end_timestamp)) {
-            $data['to_date'] = Filters::filter_end_timestamp($end_timestamp);
+        if (isset($endTimestamp)) {
+            $data['to_date'] = Filters::filter_end_timestamp($endTimestamp);
         }
         return $this->httpCall('/report/orders', 'GET', $data);
     }
@@ -415,26 +440,26 @@ class Api {
     /**
      * Get an array of license activations details
      * Activations are reportable the day after they occur - so any activations from today will not be included
-     * @param int $product_id - the id of product for which report will be created
+     * @param int $productId - the id of product for which report will be created
      * if not provided report will contain all products data
-     * @param int $start_timestamp - report start time
-     * @param int $end_timestamp - report end date
+     * @param int $startTimestamp - report start time
+     * @param int $endTimestamp - report end date
      * @return array - returned array contains:
      * - string 'license_code' - license code
      * - string 'activation_date' - activation date
      * - string 'customer_ip' - customer ip
      * - string 'customer_email' - customer email
      */
-    public function generateLicenseActivationsReport($product_id = null, $start_timestamp = null, $end_timestamp = null) {
+    public function generateLicenseActivationsReport($productId = null, $startTimestamp = null, $endTimestamp = null) {
         $data = [];
-        if (isset($product_id)) {
-            $data['product_id'] = Filters::filter_product_id($product_id);
+        if (isset($productId)) {
+            $data['product_id'] = Filters::filter_product_id($productId);
         }
-        if (isset($start_timestamp)) {
-            $data['from_date'] = Filters::filter_start_timestamp($start_timestamp);
+        if (isset($startTimestamp)) {
+            $data['from_date'] = Filters::filter_start_timestamp($startTimestamp);
         }
-        if (isset($end_timestamp)) {
-            $data['to_date'] = Filters::filter_end_timestamp($end_timestamp);
+        if (isset($endTimestamp)) {
+            $data['to_date'] = Filters::filter_end_timestamp($endTimestamp);
         }
         return $this->httpCall('/report/license_activations', 'GET', $data);
     }
@@ -447,28 +472,28 @@ class Api {
      * - int 'vendor_id'
      * - string 'vendor_auth_code'
      */
-    public function generateAuthCode($vendor_email, $vendor_password) {
+    public function generateAuthCode($vendorEmail, $vendorPassword) {
         $data = [];
 
-        $data['email'] = Filters::filter_email($vendor_email);
-        $data['password'] = $vendor_password;
+        $data['email'] = Filters::filter_email($vendorEmail);
+        $data['password'] = $vendorPassword;
 
         return $this->httpCall('/user/auth', 'POST', $data);
     }
 
     /**
      * Register external application and receive auth code, that application can use to call API methods
-     * @param string $application_name - application name
-     * @param string $application_description - application description
-     * @param string $application_icon_url - application icon url
+     * @param string $applicationName - application name
+     * @param string $applicationDescription - application description
+     * @param string $applicationIconUrl - application icon url
      * @return string
      */
-    public function registerExternalApplication($application_name, $application_description, $application_icon_url) {
+    public function registerExternalApplication($applicationName, $applicationDescription, $applicationIconUrl) {
         $data = [];
 
-        $data['name'] = $application_name;
-        $data['description'] = $application_description;
-        $data['icon'] = Filters::filter_application_icon_url($application_icon_url);
+        $data['name'] = $applicationName;
+        $data['description'] = $applicationDescription;
+        $data['icon'] = Filters::filter_application_icon_url($applicationIconUrl);
         $response = $this->httpCall('/user/getcode', 'POST', $data);
 
         return $response['code'];
@@ -514,4 +539,23 @@ class Api {
 
     }
 
+    public function createPlan(string $name, int $trialPeriod, int $length, string $lengthType, string $initialPriceUsd, string $recurringPriceUsd): int
+    {
+        if (!in_array($lengthType, ['day', 'week', 'month', 'year'])) {
+            throw new \InvalidArgumentException(self::ERR_149, 149);
+        }
+
+        $data = [
+            'plan_name' => $name,
+            'plan_trial_days' => $trialPeriod,
+            'plan_length' => $length,
+            'plan_type' => $lengthType,
+            'intial_price_usd' => $initialPriceUsd,
+            'recurring_price_usd' => $recurringPriceUsd
+        ];
+
+        $responde = $this->httpCall('/subscription/plans_create', 'POST', $data);
+
+        return $responde['product_id'];
+    }
 }
