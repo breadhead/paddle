@@ -82,6 +82,7 @@ class Api {
     const ERR_324 = '$application_icon_url must be a valid url';
 
     public function __construct($vendor_id = null, $vendor_auth_code = null, $timeout = null) {
+
         if ($vendor_id && $vendor_auth_code) {
             $this->setVendorCredentials($vendor_id, $vendor_auth_code);
         }
@@ -113,6 +114,7 @@ class Api {
      * @throws \Exception
      */
     private function httpCall($path, $method, $parameters = array()) {
+
         if (!$this->vendor_id || !$this->vendor_auth_code) {
             throw new \Exception(self::ERR_204, 204);
         }
@@ -557,5 +559,14 @@ class Api {
         $responde = $this->httpCall('/subscription/plans_create', 'POST', $data);
 
         return $responde['product_id'];
+    }
+
+    public function getSubscription(string $subscriptionId)
+    {
+        $data = [
+            'subscription_id' => $subscriptionId
+        ];
+
+        return $this->httpCall('/subscription/users', 'POST', $data);
     }
 }
