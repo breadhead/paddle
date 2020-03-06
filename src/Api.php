@@ -253,6 +253,9 @@ class Api {
         if (isset($optionalArguments['customer_country'])) {
             $data['customer_country'] = $optionalArguments['customer_country'];
         }
+        if (isset($optionalArguments['trial_days'])) {
+            $data['trial_days'] = (int)$optionalArguments['trial_days'];
+        }
         // check if webhook_url is provided (forbidden)
         if (isset($optionalArguments['webhook_url'])) {
             throw new \InvalidArgumentException(\Api::ERR_314, 314);
@@ -322,6 +325,7 @@ class Api {
         if (isset($optionalArguments['customer_email'])) {
             $data['customer_email'] = $optionalArguments['customer_email'];
         }
+
         // discountable (forbidden)
         if (isset($optionalArguments['discountable'])) {
             throw new \InvalidArgumentException(\Api::ERR_316, 316);
